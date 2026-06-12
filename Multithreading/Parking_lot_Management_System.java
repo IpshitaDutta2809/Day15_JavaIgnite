@@ -1,66 +1,51 @@
-/*
-A shopping mall has:
+class ParkingLot {
+    private int availableSlots = 3;
 
-Available Parking Slots = 3
+    public synchronized void parkCar(String carName) {
+        if (availableSlots > 0) {
+            System.out.println(carName + " Parked");
 
-Multiple cars arrive simultaneously.
+            availableSlots--;
 
-Each car is represented by a separate thread.
+            System.out.println("Available Slots: " + availableSlots);
+        } else {
+            System.out.println("No Parking Available for " + carName);
+        }
+    }
+}
 
-Requirements
-Create a shared ParkingLot class.
-Initially:
-slots = 3
-When a car arrives:
-If a slot is available:
-Park the car
-Reduce available slots
-Print:
-Car 1 Parked
-Available Slots: 2
-Otherwise:
-No Parking Available for Car 4
-Use synchronization to prevent incorrect slot allocation.
-Create at least 6 car threads.
+class CarThread extends Thread {
+    private ParkingLot parkingLot;
+    private String carName;
 
-Instructions - 
-Create Class ParkingLot
+    public CarThread(ParkingLot parkingLot, String carName) {
+        this.parkingLot = parkingLot;
+        this.carName = carName;
+    }
 
-    availableSlots ← 3
+    @Override
+    public void run() {
+        parkingLot.parkCar(carName);
+    }
+}
 
-    synchronized Method parkCar(carName)
+public class Parking_lot_Management_System {
+    public static void main(String[] args) {
 
-        IF availableSlots > 0
+        ParkingLot parkingLot = new ParkingLot();
 
-            Print carName + " Parked"
+        CarThread car1 = new CarThread(parkingLot, "Car1");
+        CarThread car2 = new CarThread(parkingLot, "Car2");
+        CarThread car3 = new CarThread(parkingLot, "Car3");
+        CarThread car4 = new CarThread(parkingLot, "Car4");
+        CarThread car5 = new CarThread(parkingLot, "Car5");
+        CarThread car6 = new CarThread(parkingLot, "Car6");
 
-            availableSlots ← availableSlots - 1
-
-            Print "Available Slots: " + availableSlots
-
-        ELSE
-
-            Print "No Parking Available for " + carName
-
-        END IF
-
-
-Create Class CarThread
-
-    ParkingLot parkingLot
-    carName
-
-    Method run()
-
-        parkingLot.parkCar(carName)
-
-
-Main Method
-
-    Create ParkingLot object
-
-    Create Car1 thread till Car6 thread
-    Start Car1 till  Car6
-
-
-*/
+        car1.start();
+        car2.start();
+        car3.start();
+        car4.start();
+        car5.start();
+        car6.start();
+    }
+}
