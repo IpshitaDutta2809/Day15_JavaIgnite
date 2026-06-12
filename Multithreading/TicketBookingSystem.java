@@ -1,81 +1,48 @@
-/*
-Ticket Booking System
+class Theater {
+    private int totalSeats = 5;
 
-A movie theater has:
+    public synchronized void bookSeat(int seats) {
+        if (totalSeats >= seats) {
+            System.out.println(Thread.currentThread().getName()
+                    + " Booking Successful");
 
-Total Seats = 5
+            totalSeats = totalSeats - seats;
 
-Create:
+            System.out.println("Remaining Seats = " + totalSeats);
+        } else {
+            System.out.println(Thread.currentThread().getName()
+                    + " Booking Failed");
+        }
+    }
+}
 
-Multiple booking threads
-Requirements
-Each thread tries to book seats.
-If seats are available, booking succeeds.
-Otherwise print:
-Booking Failed
+class BookingThread extends Thread {
+    private Theater theater;
+    private int seatsRequired;
 
-Concepts Tested
-Threads
-Shared Resource
-Synchronized Method
+    public BookingThread(Theater theater, int seatsRequired, String name) {
+        super(name);
+        this.theater = theater;
+        this.seatsRequired = seatsRequired;
+    }
 
-Instructions - 
-Create class Theater
+    @Override
+    public void run() {
+        theater.bookSeat(seatsRequired);
+    }
+}
 
-    Variable:
-        totalSeats = 5
+public class TicketBookingSystem {
+    public static void main(String[] args) {
 
-    synchronized method bookSeat(int seats)
+        Theater theater = new Theater();
 
-        If totalSeats >= seats
+        BookingThread t1 = new BookingThread(theater, 2, "Thread1");
+        BookingThread t2 = new BookingThread(theater, 2, "Thread2");
+        BookingThread t3 = new BookingThread(theater, 2, "Thread3");
 
-            Print:
-                ThreadName + " Booking Successful"
-
-            totalSeats = totalSeats - seats
-
-            Print remaining seats
-
-        Else
-
-            Print:
-                ThreadName + " Booking Failed"
-
-
-Create class BookingThread extends Thread
-
-    Theater theater
-    int seatsRequired
-
-    Constructor receives:
-        theater
-        seatsRequired
-
-    run()
-
-        theater.bookSeat(seatsRequired)
-
-
-Main Method
-
-    Create Theater object
-
-    Create Thread1 -> wants 2 seats
-    Create Thread2 -> wants 2 seats
-    Create Thread3 -> wants 2 seats
-
-    Start Thread1
-    Start Thread2
-    Start Thread3
-
-
-Possible Output
-
-    Thread1 Booking Successful
-    Remaining Seats = 3
-
-    Thread2 Booking Successful
-    Remaining Seats = 1
-
-    Thread3 Booking Failed
-*/
+        t1.start();
+        t2.start();
+        t3.start();
+    }
+}
