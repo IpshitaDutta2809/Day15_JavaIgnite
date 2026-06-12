@@ -1,94 +1,47 @@
-/*
-Create:
+interface NotificationService {
+    void sendMessage();
+}
 
-Interface
-NotificationService
+class EmailNotification implements NotificationService {
+    @Override
+    public void sendMessage() {
+        System.out.println("Email Notification Sent");
+    }
+}
 
-Method:
+class SMSNotification implements NotificationService {
+    @Override
+    public void sendMessage() {
+        System.out.println("SMS Notification Sent");
+    }
+}
 
-sendMessage()
+class OrderService {
+    private NotificationService notificationService;
 
-Implement:
+    public OrderService(NotificationService notificationService) {
+        this.notificationService = notificationService;
+    }
 
-EmailNotification
-SMSNotification
+    public void placeOrder() {
+        System.out.println("Order Confirmed");
+        notificationService.sendMessage();
+    }
+}
 
-Create:
+public class Online_Food_Order_Notification {
+    public static void main(String[] args) {
 
-OrderService
-Requirements
+        // Email Notification
+        NotificationService email = new EmailNotification();
+        OrderService order1 = new OrderService(email);
+        order1.placeOrder();
 
-Inject notification service using:
+        System.out.println();
 
-Constructor Injection
-When order is placed:
-
-Order Confirmed
-Notification Sent
-Concepts Tested
-Dependency Injection
-Interface
-Loose Coupling
-
-Instructions -
-Create Interface NotificationService
-
-    Method:
-        sendMessage()
-
-
-Create Class EmailNotification
-
-    Implement NotificationService
-
-    Override sendMessage()
-
-        Print:
-            "Email Notification Sent"
-
-
-Create Class SMSNotification
-
-    Implement NotificationService
-
-    Override sendMessage()
-
-        Print:
-            "SMS Notification Sent"
-
-
-Create Class OrderService
-
-    Variable:
-        NotificationService notificationService
-
-    Constructor(NotificationService notificationService)
-
-        this.notificationService = notificationService
-
-    Method placeOrder()
-
-        Print:
-            "Order Confirmed"
-
-        notificationService.sendMessage()
-
-
-Main Method
-
-    Create EmailNotification object
-
-    Create OrderService object
-    Inject EmailNotification through constructor
-
-    Call placeOrder()
-
-
-    Create SMSNotification object
-
-    Create OrderService object
-    Inject SMSNotification through constructor
-
-    Call placeOrder()
-
-*/
+        // SMS Notification
+        NotificationService sms = new SMSNotification();
+        OrderService order2 = new OrderService(sms);
+        order2.placeOrder();
+    }
+}
